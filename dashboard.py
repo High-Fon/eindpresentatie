@@ -292,12 +292,12 @@ with col1:
 
     st.plotly_chart(predict, True)
 
-    st.markdown('''
-    Sources:
-    https://www.kaggle.com/datasets/shellshock1911/us-commercial-aviation-industry-metrics
-    https://www.kaggle.com/datasets/aravindram11/list-of-us-airports
-    https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FLM
-    ''')
+    st.markdown('''<p>
+    Sources:<br>
+    https://www.kaggle.com/datasets/shellshock1911/us-commercial-aviation-industry-metrics<br>
+    https://www.kaggle.com/datasets/aravindram11/list-of-us-airports<br>
+    https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FLM<br></p>
+    ''', True)
 
 with col2:
     st.header('Seating efficiency per airline')
