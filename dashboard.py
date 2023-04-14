@@ -190,8 +190,11 @@ box.update_yaxes({'title':'Flights per month'})
 # Streamlit initialisation
 st.set_page_config(layout='wide', page_title='Domestic air travel in the USA')
 st.title('Domestic air travel in the USA')
+st.markdown('This dashboard aims to shed light on performance indicators of fifteen US airlines, and their networks to and from 29 airports within the United States of America. From each airlines a number of variables are known per month dating from 2003 to 2016. Available Seat Miles (ASM) and Revenue Passenger Miles (RPM) are combined to create the seating efficiency of the airlines. Using this data, a prediction can be made about the growth of each airlines should the COVID-19 epidemic not have happened.')
 col1, col2, col3 = st.columns([4, 1, 4])
 with col1:
+    st.header('Map of airline networks')
+    st.markdown('This map is created using the combination of three datasets. The original kaggle dataset was combined with another to find the geographical coordinates of each airport. A third dataset was imported from the US Department of Transportation. From this dataset it was cross-referenced to find the routes taken to each airport for all airlines in the dataset.')
     map1, map2 = st.columns(2)
     with map1:
         ap_select = st.multiselect('Select airport(s)', ['All'] + [*ap_codes['iata']], 'EWR')
@@ -216,22 +219,27 @@ with col1:
 
 with col2:
     st.markdown( '''<p><b>Airline IATA codes</b><br>
-                    AS, Alaska Airlines<br>
-                    G4, Allegient Air <br>
-                    AA, American Airlines<br>
-                    DL, Delta Airlines<br>
-                    MQ, Frontier Airlines<br>
-                    EV, Envoy Air<br>
-                    F9, ExpressJet Airlines<br>
-                    HA, Hawaiian Airlines<br>
-                    B6, JetBlue Airways<br>
-                    OO, SkyWest Airlines<br>
-                    WN, Southwest Airlines<br>
-                    NK, Spirit Airlines<br>
-                    UA, United Airlines</p>''' , unsafe_allow_html=True)
+                    AS = Alaska Airlines<br>
+                    G4 = Allegient Air <br>
+                    AA = American Airlines<br>
+                    DL = Delta Airlines<br>
+                    MQ = Frontier Airlines<br>
+                    EV = Envoy Air<br>
+                    F9 = ExpressJet Airlines<br>
+                    HA = Hawaiian Airlines<br>
+                    B6 = JetBlue Airways<br>
+                    OO = SkyWest Airlines<br>
+                    WN = Southwest Airlines<br>
+                    NK = Spirit Airlines<br>
+                    UA = United Airlines</p>''' , unsafe_allow_html=True)
 
 with col3:
-    asm_rpm = st.radio('Choose ASM or RPM', ['ASM', 'RPM'], 0)
+    st.header('Airline ASM/RPM over time')
+    col4, col5 = st.columns([3, 1])
+    with col4:
+      st.markdown('All airlines generate Available Seat Miles and Revenue Passenger Miles with each flight. ASM is the amount of seats for each flown mile, whereas RPM is the amount of paid-for seats per flown mile. This has been plotted with the yearly sum per airline. This shows a distinction between four larger airlines and the other smaller airlines which generate less ASM/RPM.')
+    with col5:  
+      asm_rpm = st.radio('Choose ASM or RPM', ['ASM', 'RPM'], 0)
     if asm_rpm == 'ASM':
       st.plotly_chart(airline_asm, True)
     if asm_rpm ==  'RPM':
@@ -240,10 +248,14 @@ with col3:
 
 col1, col2 = st.columns(2)
 with col1:
-    # Boxplot of monthly passengers per flight
+    # Boxplot of monthly passengers per flights
+    st.header('Spread of monthly amounts of flights per airline')
+    st.markdown('Below is a boxplot of the monthly amount of flights per airline. This shows the spread of the amount of flights operated by each airline per month. From this an average is found and shows the difference between airlines operations.')
     st.plotly_chart(box, True)
 
     # Regression predictions
+    st.header('Prediction of ASM/RPM growth')
+    st.markdown('From the ASM and RPM data of each airline a prediction can be made about the growth of these statistics. To do this data leading up to the stock crisis of 2008/2009 has been excluded from the dataset as this skews the linear regression which has been applied. This shows what the growth could have been without the interference of the COVID-19 epidemic.')
     predict1, predict2 = st.columns(2)
     with predict1:
       predict_radio = st.radio('Select statistic', ['ASM', 'RPM'])
@@ -281,6 +293,8 @@ with col1:
     st.plotly_chart(predict, True)
 
 with col2:
+    st.header('Seating efficiency per airline')
+    st.markdown('From the ASM and RPM data of each airline the seating efficiency of the average flight can be calculated. As ASM represent the total available seats per mile and RPM represent the occupied seats per mile. By dividing the RPM by the ASM the seating efficiency is found. The dataset can be filtered on timeframe to find the seating efficiency within the specified timeframe.')
     eff_slider = st.select_slider('Select time period', one_d_data['date'], [one_d_data['date'].iloc[0], one_d_data['date'].iloc[-1]])
     eff_df = one_d_data[(one_d_data['date']>=eff_slider[0]) & (one_d_data['date'] < eff_slider[1])]
     # Efficiency bar chart
@@ -294,6 +308,8 @@ with col2:
 
     st.plotly_chart(eff, True)
     # Average passengers
+    st.header('Monthly average passengers per flight per airline')
+    st.markdown('The below shown histogram displays the monthly average amount of passengers per flight for each airline. This is also filtered by the timeframe slider above. This shows the average amount of passengers per flight and relates to the type of fleet each airline operates with. For example, Southwest is a low cost airline which operates only Boeing 737 type aircraft. Envoy Air only operates smaller Bombardier CRJ airplanes that feed passengers to its subsidiary airline American Airlines. The Bombardier jet is much smaller than the Boeing 737, which explains the smaller average passengers per flight. ')
     pass_count = go.Figure()
 
     for column in eff_df.columns[eff_df.columns.str.contains('pass')]:
