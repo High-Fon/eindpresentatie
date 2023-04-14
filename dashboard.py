@@ -292,6 +292,13 @@ with col1:
 
     st.plotly_chart(predict, True)
 
+    st.markdown('''
+    Sources:
+    https://www.kaggle.com/datasets/shellshock1911/us-commercial-aviation-industry-metrics
+    https://www.kaggle.com/datasets/aravindram11/list-of-us-airports
+    https://www.transtats.bts.gov/Fields.asp?gnoyr_VQ=FLM
+    ''')
+
 with col2:
     st.header('Seating efficiency per airline')
     st.markdown('From the ASM and RPM data of each airline the seating efficiency of the average flight can be calculated. As ASM represent the total available seats per mile and RPM represent the occupied seats per mile. By dividing the RPM by the ASM the seating efficiency is found. The dataset can be filtered on timeframe to find the seating efficiency within the specified timeframe.')
